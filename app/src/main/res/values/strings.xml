@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">EarthQuake Tracker</string>
+    <string name="location">Location</string>
+    <string-array name="location_array">
+        <item>India</item>
+        <item>USA</item>
+        <item>Africa</item>
+    </string-array>
+</resources>
