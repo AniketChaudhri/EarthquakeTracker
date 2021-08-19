@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.aniket.earthquaketracker.MainActivity.EARTHQUAKE_COUNT;
+import static com.aniket.earthquaketracker.MainActivity.LATITUDE;
+import static com.aniket.earthquaketracker.MainActivity.LONGITUDE;
 import static com.aniket.earthquaketracker.MainActivity.MIN_MAGNITUDE;
 
 public class EarthquakeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Earthquake>>{
@@ -49,19 +51,37 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
     private EarthquakeAdapter adapter;
     private TextView txtNoEarthquakes;
     private ProgressBar loadingSpinner;
+
+    private double latitude;
+    private double longitude;
+    private String minMagnitude;
+    private String earthquakeCount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_earthquake);
 
 
-        String minMagnitude = getIntent().getStringExtra(MIN_MAGNITUDE);
-        String earthquakeCount = getIntent().getStringExtra(EARTHQUAKE_COUNT);
+        minMagnitude = getIntent().getStringExtra(MIN_MAGNITUDE);
+        earthquakeCount = getIntent().getStringExtra(EARTHQUAKE_COUNT);
+        latitude = getIntent().getDoubleExtra(LATITUDE, 0);
+        longitude = getIntent().getDoubleExtra(LONGITUDE, 0);
+
+
+        Log.v("EarthquakeActivity", "latitude: " + latitude);
+
+
         txtNoEarthquakes = findViewById(R.id.txtNoEarthquakes);
         loadingSpinner = findViewById(R.id.loadingSpinner);
 
         Log.v("EarthquakeActivity", "Input received " + minMagnitude);
-        USGS_REQUEST_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&orderby=time&minmagnitude=" + minMagnitude + "&limit=" + earthquakeCount;
+
+        USGS_REQUEST_URL = urlBuilder();
+//        StringBuilder urlBuilder = new StringBuilder();
+
+
+//        USGS_REQUEST_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&orderby=time&starttime=2001-01-01&minmagnitude=" + minMagnitude + "&limit=" + earthquakeCount + "&latitude=" + String.valueOf(latitude) + "&longitude=" + String.valueOf(longitude) + "&maxradiuskm=1000";
 
 
         // Create a fake list of earthquake locations.
@@ -128,6 +148,7 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
     @NonNull
     @Override
     public Loader<List<Earthquake>> onCreateLoader(int id, @Nullable Bundle args) {
+        Log.e("EarthquakeActivity", USGS_REQUEST_URL);
         return new EarthquakeLoader(this, USGS_REQUEST_URL);
     }
 
@@ -174,4 +195,20 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
 //
 //        }
 //    }
+    private String urlBuilder(){
+        StringBuilder url = new StringBuilder();
+        url.append("https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&orderby=time");
+        url.append("&minmagnitude="+ minMagnitude);
+        url.append("&limit="+ earthquakeCount);
+        url.append("&starttime=" + "2015-01-01");
+
+        if (latitude != 0.0) url.append("&latitude=" + String.valueOf(latitude) + "&maxradiuskm=1000");
+        if (longitude != 0.0) url.append("&longitude=" + String.valueOf(longitude));
+
+
+
+
+        String USGSurl = url.toString();
+        return USGSurl;
+    }
 }
