@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         btnReduceEarthquakeCount = findViewById(R.id.btnReduceEarthquakeCount);
         txtEarthquakeCount = findViewById(R.id.txtEarthquakeCount);
         txtEarthquakeCount.setText(String.valueOf(earthquakeCount));
-        btnLocation = findViewById(R.id.btnLocation);
+//        btnLocation = findViewById(R.id.btnLocation);
         switchCurrentLocation = findViewById(R.id.switch1);
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
@@ -113,12 +113,12 @@ public class MainActivity extends AppCompatActivity {
         locationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         locationSpinner.setAdapter(locationAdapter);
 
-        btnLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+//        btnLocation.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//            }
+//        });
 
         switchCurrentLocation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                     if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
                         if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                             getLocation();
-                            Toast.makeText(MainActivity.this, "You checked location" + latitude, Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(MainActivity.this, "You checked location" + latitude, Toast.LENGTH_SHORT).show();
                         } else {
                             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
                             getLocation();
@@ -219,8 +219,9 @@ public class MainActivity extends AppCompatActivity {
                         Log.v("Main Activity", "longitude received: " + longitude);
                         latitude = addresses.get(0).getLatitude();
                         Log.v("Main Activity", "latitude received: " + latitude);
+                        Toast.makeText(MainActivity.this, "Location: " + addresses.get(0).getLocality(), Toast.LENGTH_SHORT).show();
 
-                        Toast.makeText(MainActivity.this, "Location" + addresses.get(0).getLatitude(), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(MainActivity.this, "Latitude: " + addresses.get(0).getLatitude(), Toast.LENGTH_SHORT).show();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
